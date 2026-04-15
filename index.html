@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kompletny przewodnik po systemie Linux Mint dla początkujących użytkowników. Instalacja, konfiguracja i pierwsze kroki.">
+    <title>Przewodnik po Linux Mint - Dla Początkujących</title>
+    <style>
+        /* --- ZMIENNE I RESET --- */
+        :root {
+            --mint-green: #87CF3E;
+            --mint-dark: #6DA32C;
+            --text-main: #2c3e50;
+            --text-light: #546e7a;
+            --bg-body: #f9fbfd;
+            --bg-white: #ffffff;
+            --bg-code: #f4f4f4;
+            --border-color: #e1e4e8;
+            --shadow: 0 4px 6px rgba(0,0,0,0.05);
+            --radius: 8px;
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: 'Consolas', 'Monaco', 'Courier New', monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            line-height: 1.6;
+            font-size: 16px;
+        }
+
+        /* --- TYPOGRAFIA --- */
+        h1, h2, h3 {
+            color: #1a252f;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; margin-top: 2rem; border-bottom: 3px solid var(--mint-green); display: inline-block; padding-bottom: 5px; }
+        h3 { font-size: 1.5rem; margin-top: 1.5rem; color: var(--mint-dark); }
+
+        p { margin-bottom: 1rem; max-width: 80ch; }
+        
+        ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+        li { margin-bottom: 0.5rem; }
+
+        a { color: var(--mint-dark); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        a:hover { color: var(--mint-green); text-decoration: underline; }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        section:last-of-type { border-bottom: none; }
+
+        /* --- NAWIGACJA --- */
+        header {
+            position: sticky;
+            top: 0;
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--mint-dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-links a:hover { color: var(--mint-green); text-decoration: none; }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            color: var(--text-main);
+        }
+
+        /* --- KOMPONENTY --- */
+        .card {
+            background: var(--bg-white);
+            padding: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--mint-green);
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--mint-green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-weight: bold;
+            transition: background 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover { background-color: var(--mint-dark); text-decoration: none; }
+
+        /* --- BLOKI KODU --- */
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: var(--radius);
+            overflow-x: auto;
+            position: relative;
+            margin-bottom: 1.5rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            background-color: var(--bg-code);
+            padding: 2px 5px;
+            border-radius: 4px;
+            color: #d63384;
+            font-size: 0.9em;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover { background: rgba(255,255,255,0.4); }
+
+        /* --- STOPKA --- */
+        footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 40px;
+        }
+
+        footer a { color: var(--mint-green); }
+
+        /* --- RESPANSYWNOŚĆ --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            
+            .hamburger { display: block; }
+
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--bg-white);
+                padding: 20px;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+                text-align: center;
+            }
+
+            .nav-links.active { display: flex; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAGŁÓWEK -->
+    <header>
+        <div class="container">
+            <nav role="navigation" aria-label="Główna nawigacja">
+                <div class="logo">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    Linux Mint Guide
+                </div>
+                <button class="hamburger" aria-label="Otwórz menu" aria-expanded="false">
+                    ☰
+                </button>
+                <ul class="nav-links">
+                    <li><a href="#wstep">Wstęp</a></li>
+                    <li><a href="#instalacja">Instalacja</a></li>
+                    <li><a href="#pierwsze-kroki">Pierwsze kroki</a></li>
+                    <li><a href="#oprogramowanie">Oprogramowanie</a></li>
+                    <li><a href="#problemy">Problemy</a></li>
+                    <li><a href="#pomoc">Pomoc</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- SEKCJA 1: WSTĘP -->
+        <section id="wstep">
+            <h1>Witaj w świecie Linux Mint</h1>
+            <p>Cześć! Jeśli trafiłeś na tę stronę, prawdopodobnie rozważasz zmianę systemu operacyjnego lub właśnie zainstalowałeś Linux Mint. To świetny wybór!</p>
+            
+            <div class="card">
+                <h3>Dlaczego Linux Mint?</h3>
+                <p><strong>Linux Mint</strong> to darmowy system operacyjny (open source), który jest stabilny, bezpieczny i niezwykle łatwy w obsłudze. W przeciwieństwie do Windowsa, nie spowalnia z czasem i szanuje Twoją prywatność.</p>
+                <ul>
+                    <li><strong>Darmowy:</strong> Nie płacisz za licencję.</li>
+                    <li><strong>Znajomy wygląd:</strong> Menu Start, pasek zadań – wszystko tam, gdzie przyzwyczaiłeś się tego szukać.</li>
+                    <li><strong>Bezpieczny:</strong> Wirusy są tu rzadkością, a aktualizacje nie wymuszają restartu w najmniej odpowiednim momencie.</li>
+                </ul>
+            </div>
+            <p>Niniejszy przewodnik poprowadzi Cię za rękę przez proces instalacji i pierwszych konfiguracji. Nie musisz być informatykiem, aby to zrozumieć!</p>
+        </section>
+
+        <!-- SEKCJA 2: INSTALACJA -->
+        <section id="instalacja">
+            <h2>1. Instalacja Systemu</h2>
+            <p>Proces instalacji składa się z kilku prostych kroków. Najpierw musimy przygotować pendrive'a instalacyjnego.</p>
+
+            <h3>Krok 1: Pobieranie obrazu ISO</h3>
+            <p>Wejdź na oficjalną stronę <a href="https://linuxmint.com/download.php" target="_blank" rel="noopener noreferrer">linuxmint.com</a>. Wybierz wersję "Cinnamon Edition" (najbardziej klasyczna). Kliknij przycisk pobierania i wybierz serwer najbliżej Ciebie.</p>
+
+            <h3>Krok 2: Tworzenie nośnika USB</h3>
+            <p>Pobrany plik to obraz płyty (ISO). Aby go zainstalować, potrzebujesz programu do nagrywania go na pendrive (min. 4GB).</p>
+            <ul>
+                <li><strong>Windows:</strong> Pobierz darmowy program <a href="https://rufus.ie/" target="_blank" rel="noopener noreferrer">Rufus</a>.</li>
+                <li><strong>macOS / Linux:</strong> Użyj programu <a href="https://balena.io/etcher" target="_blank" rel="noopener noreferrer">BalenaEtcher</a>.</li>
+            </ul>
+            <p>Uruchom program, wskaż pobrany plik ISO, wskaż swój pendrive i kliknij "Start". Uwaga: Dane na pendrivie zostaną usunięte!</p>
+
+            <h3>Krok 3: Uruchomienie Live USB</h3>
+            <p>Podłącz pendrive do komputera, na którym chcesz zainstalować system. Uruchom komputer i wejdź do menu bootowania (zazwyczaj klawisz F12, F9 lub Esc podczas startu). Wybierz swój pendrive z listy.</p>
+            <p>System uruchomi się w trybie "Live" – możesz go przetestować bez instalacji. Jeśli wszystko działa, kliknij ikonę dysku na pulpicie: <strong>"Install Linux Mint"</strong>.</p>
+
+            <h3>Krok 4: Proces instalacji</h3>
+            <ol>
+                <li>Wybierz język polski.</li>
+                <li>Układ klawiatury: zazwyczaj "Polish" lub "Polish - elimination of dead keys" (zalecane).</li>
+                <li>Kodeki multimedialne: <strong>Zaznacz opcję</strong> "Zainstaluj kodeki multimedialne" (dzięki temu odtworzysz filmy MP3/MP4).</li>
+                <li>Typ instalacji:
+                    <ul>
+                        <li><em>Wyczyść dysk i zainstaluj Linux Mint</em> – usuwa Windowsa i wszystkie dane (najprostsza opcja).</li>
+                        <li><em>Zainstaluj obok...</em> – pozwala zachować Windowsa i wybierać system przy starcie.</li>
+                    </ul>
+                </li>
+                <li>Strefa czasowa: kliknij na mapie w Warszawę.</li>
+                <li>Utwórz użytkownika: podaj swoje imię, nazwę komputera, login i hasło.</li>
+            </ol>
+            <p>Po zakończeniu restartuj komputer i wyjmij pendrive.</p>
+        </section>
+
+        <!-- SEKCJA 3: PIERWSZE KROKI -->
+        <section id="pierwsze-kroki">
+            <h2>2. Pierwsze kroki po instalacji</h2>
+            <p>Gratulacje! Masz działający system. Zanim zaczniesz pracować, wykonaj kilka kluczowych czynności.</p>
+
+            <div class="card">
+                <h3>Menadżer Aktualizacji (Tarcza)</h3>
+                <p>Na pasku zadań (w zasobniku) zobaczysz ikonę tarczy. Kliknij ją. System sprawdzi nowe poprawki bezpieczeństwa.</p>
+                <p>Kliknij <strong>"Zainstaluj aktualizacje"</strong>. To najważniejszy krok dla bezpieczeństwa Twojego komputera.</p>
+            </div>
+
+            <div class="card">
+                <h3>Menedżer Sterowników</h3>
+                <p>Niektóre karty graficzne (NVIDIA) lub karty Wi-Fi wymagają własnościowych sterowników.</p>
+                <ol>
+                    <li>Otwórz Menu Start i wpisz "Menedżer sterowników".</li>
+                    <li>System przeskanuje sprzęt. Jeśli znajdzie lepsze sterowniki niż domyślne, zaproponuje ich instalację.</li>
+                    <li>Zaznacz je i kliknij "Zastosuj zmiany".</li>
+                </ol>
+            </div>
+
+            <h3>Konfiguracja pulpitu</h3>
+            <p>Linux Mint Cinnamon jest bardzo konfigurowalny. Kliknij prawym przyciskiem myszy na pulpit i wybierz "Aplety", "Widżety" lub "Motywy", aby zmienić wygląd systemu zgodnie z Twoim gustem.</p>
+        </section>
+
+        <!-- SEKCJA 4: OPROGRAMOWANIE -->
+        <section id="oprogramowanie">
+            <h2>3. Zarządzanie oprogramowaniem</h2>
+            <p>W Linuxie nie szukamy programów w Google. Mamy do tego dedykowane narzędzia.</p>
+
+            <h3>Menedżer Oprogramowania (Sklep z aplikacjami)</h3>
+            <p>Otwórz Menu -> Administracja -> Menedżer oprogramowania. Działa jak sklep w telefonie. Wpisz nazwę programu (np. Spotify, VLC, Steam), kliknij "Zainstaluj" i gotowe.</p>
+
+            <h3>Terminal – Twoja supermoc</h3>
+            <p>Większość zadań wykonasz klikając myszką, ale terminal pozwala zrobić to szybciej i precyzyjniej. Nie bój się czarnego ekranu!</p>
+            <p>Otwórz terminal skrótem <code>Ctrl+Alt+T</code>.</p>
+
+            <h4>Podstawowe komendy:</h4>
+            
+            <p><strong>Aktualizacja listy pakietów:</strong> (warto robić przed instalacją czegoś nowego)</p>
+<pre><code>sudo apt update</code><button class="copy-btn" aria-label="Kopiuj kod">Kopiuj</button></pre>
+
+            <p><strong>Aktualizacja zainstalowanych programów:</strong></p>
+<pre><code>sudo apt upgrade -y</code><button class="copy-btn" aria-label="Kopiuj kod">Kopiuj</button></pre>
+
+            <p><strong>Instalacja programu:</strong> (np. przeglądarki Firefox, choć jest domyślnie)</p>
+<pre><code>sudo apt install firefox</code><button class="copy-btn" aria-label="Kopiuj kod">Kopiuj</button></pre>
+
+            <p><strong>Usuwanie programu:</strong></p>
+<pre><code>sudo apt remove nazwa_programu</code><button class="copy-btn" aria-label="Kopiuj kod">Kopiuj</button></pre>
+
+            <p><em>Wyjaśnienie:</em> <code>sudo</code> oznacza "wykonaj jako administrator" (system poprosi o Twoje hasło). <code>apt</code> to narzędzie do zarządzania paczkami.</p>
+        </section>
+
+        <!-- SEKCJA 5: ROZWIĄZYWANIE PROBLEMÓW -->
+        <section id="problemy">
+            <h2>4. Rozwiązywanie typowych problemów</h2>
+            
+            <h3>Brak dźwięku</h3>
+            <p>Często system wybiera złe urządzenie wyjściowe.</p>
+            <ol>
+                <li>Kliknij ikonę głośnika na pasku zadań.</li>
+                <li>Wybierz "Ustawienia dźwięku".</li>
+                <li>W zakładce "Wyjście" sprawdź, czy wybrano właściwe głośniki (np. "Built-in Audio Analog Stereo").</li>
+            </ol>
+
+            <h3>Problem z Wi-Fi</h3>
+            <p>Jeśli ikona sieci pokazuje brak połączenia:</p>
+            <ol>
+                <li>Sprawdź fizyczny przełącznik Wi-Fi w laptopie (często Fn + klawisz z anteną).</li>
+                <li>Uruchom ponownie router.</li>
+                <li>Jeśli to nie pomaga, sprawdź w "Menedżerze sterowników", czy nie brakuje sterownika do karty sieciowej.</li>
+            </ol>
+
+            <h3>Kopia zapasowa (Timeshift)</h3>
+            <p>Linux Mint ma wbudowany genialny tool do cofania systemu w czasie, nazywa się <strong>Timeshift</strong>.</p>
+            <p>Otwórz Menu -> Administracja -> Timeshift. Skonfiguruj go tak, aby robił codzienne migawki. Jeśli coś zepsujesz w systemie, przywrócisz go do stanu sprzed awarii w 5 minut.</p>
+        </section>
+
+        <!-- SEKCJA 6: GDZIE SZUKAĆ POMOCY -->
+        <section id="pomoc">
+            <h2>5. Gdzie szukać pomocy?</h2>
+            <p>Jesteś częścią ogromnej społeczności. Jeśli utkniesz, ktoś już miał ten problem i go rozwiązał.</p>
+            
+            <div class="card">
+                <ul>
+                    <li><strong>Oficjalna dokumentacja:</strong> <a href="https://linuxmint-user-guide.readthedocs.io/en/latest/" target="_blank" rel="noopener noreferrer">Linux Mint User Guide</a> (dostępna też w Menu Start).</li>
+                    <li><strong>Forum Linux Mint:</strong> <a href="https://forums.linuxmint.com/" target="_blank" rel="noopener noreferrer">forums.linuxmint.com</a> – największe źródło wiedzy (głównie angielski).</li>
+                    <li><strong>Polska społeczność:</strong> Warto poszukać grup na Facebooku ("Linux Polska") lub polskich forów technicznych (np. Forum Ubuntu Polska, które często pomaga użytkownikom Minta).</li>
+                    <li><strong>Google:</strong> Wpisując błędy, dodawaj frazę "Linux Mint 21" (lub 22), aby uzyskać aktualne rozwiązania.</li>
+                </ul>
+            </div>
+            <p>Pamiętaj: w świecie Linuxa nie ma głupich pytań. Powodzenia!</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Przewodnik Linux Mint. Stworzono dla społeczności.</p>
+            <p style="font-size: 0.8rem; opacity: 0.7;">Strona jest niezależnym projektem edukacyjnym.</p>
+        </div>
+    </footer>
+
+    <!-- SKRYPTY JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. Obsługa Hamburger Menu
+            const hamburger = document.querySelector('.hamburger');
+            const navLinks = document.querySelector('.nav-links');
+
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const isExpanded = hamburger.getAttribute('aria-expanded') === 'true';
+                hamburger.setAttribute('aria-expanded', !isExpanded);
+            });
+
+            // Zamknij menu po kliknięciu w link (mobile)
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth <= 768) {
+                        navLinks.classList.remove('active');
+                        hamburger.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            });
+
+            // 2. Funkcja Kopiowania Kodu
+            const copyButtons = document.querySelectorAll('.copy-btn');
+
+            copyButtons.forEach(btn => {
+                btn.addEventListener('click', async () => {
+                    const pre = btn.parentElement;
+                    const code = pre.querySelector('code').innerText;
+
+                    try {
+                        await navigator.clipboard.writeText(code);
+                        
+                        // Wizualny feedback
+                        const originalText = btn.innerText;
+                        btn.innerText = 'Skopiowano!';
+                        btn.style.background = 'rgba(135, 207, 62, 0.8)'; // Mint green
+                        
+                        setTimeout(() => {
+                            btn.innerText = originalText;
+                            btn.style.background = 'rgba(255,255,255,0.2)';
+                        }, 2000);
+                    } catch (err) {
+                        console.error('Błąd kopiowania:', err);
+                        btn.innerText = 'Błąd';
+                    }
+                });
+            });
+
+            // 3. Płynne przewijanie dla starszych przeglądarek (opcjonalne, bo CSS scroll-behavior działa w nowych)
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        // Uwzględnienie wysokości sticky headera
+                        const headerOffset = 80;
+                        const elementPosition = targetElement.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: "smooth"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
